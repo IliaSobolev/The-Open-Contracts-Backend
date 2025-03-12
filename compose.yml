@@ -1,0 +1,18 @@
+services:
+  mongo:
+    image: mongo:7.0.9
+    restart: always
+    env_file: ".mongo.env"
+    ports:
+      - "127.0.0.1:27017:27017"
+    volumes:
+      - "mongo_data:/data/db"
+  toc_service:
+    build: .
+    restart: always
+    env_file: ".toc.env"
+    ports:
+      - "1610:1610"
+
+volumes:
+  mongo_data:
