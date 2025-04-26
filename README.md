@@ -139,11 +139,14 @@ The API supports the following programming languages for code blocks:
       "error": "failed to get codeBlock"
     }
     ```
-
 #### 3. List All Code Blocks
 - **Method**: GET
 - **Path**: `/toc/v1/codeblock/list`
-- **Description**: Retrieves a list of all code blocks.
+- **Description**: Retrieves a list of all code blocks. Supports optional query parameters for filtering by author name, programming language, and sorting by rating.
+- **Query Parameters** (all optional):
+  - `author_name` (string): Filters code blocks by the author's name.
+  - `lang` (string): Filters code blocks by programming language (e.g., `func`, `fift`, `tact`, `tolk`).
+  - `sort_order` (string): Specifies the sort order by rating. Valid values: `asc` (ascending), `desc` (descending). Default: `desc`.
 - **Responses**:
   - **200 OK**:
     ```json
