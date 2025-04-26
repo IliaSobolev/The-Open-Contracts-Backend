@@ -66,7 +66,11 @@ func (m *Module) getCodeBlock(c *gin.Context) {
 }
 
 func (m *Module) getCodeBlocks(c *gin.Context) {
-	res, err := m.cb.List(context.Background())
+	authorName := c.Query("author_name")
+	lang := c.Query("lang")
+	sortOrder := c.DefaultQuery("sort_order", "desc")
+
+	res, err := m.cb.List(context.Background(), authorName, lang, sortOrder)
 	if err != nil {
 		if errors.Is(err, domain.ErrCodeBlockNotFound) {
 			c.AbortWithStatusJSON(http.StatusNotFound, gin.H{"error": "code blocks not found"})

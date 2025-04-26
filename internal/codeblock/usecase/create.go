@@ -2,6 +2,7 @@ package usecase
 
 import (
 	"TOC/pkg/domain"
+	"TOC/pkg/utils"
 	"context"
 	"github.com/google/uuid"
 	"github.com/pkg/errors"
@@ -14,19 +15,13 @@ func (uc *uc) Create(ctx context.Context, codeBlockDTO domain.CodeBlockDTO) erro
 	if codeBlockDTO.Title == "" || codeBlockDTO.Description == "" || codeBlockDTO.Body == "" || !titleRegex.MatchString(codeBlockDTO.Title) {
 		return errors.New("invalid data")
 	}
-	found := false
-	for _, lang := range domain.Languages {
-		if lang == codeBlockDTO.Lang {
-			found = true
-			break
-		}
-	}
+	found := utils.LangValidation(codeBlockDTO.Lang)
 	if !found {
 		return errors.New("invalid data")
 	}
 	codeBlock := domain.CodeBlock{
 		ID:          uuid.NewString(),
-		AuthorID:    codeBlockDTO.AuthorID,
+		AuthorName:  codeBlockDTO.AuthorName,
 		Title:       codeBlockDTO.Title,
 		Description: codeBlockDTO.Description,
 		Rating:      0,
