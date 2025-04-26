@@ -6,6 +6,7 @@ import (
 	"github.com/pkg/errors"
 	"go.mongodb.org/mongo-driver/bson"
 	"go.mongodb.org/mongo-driver/mongo"
+	"go.mongodb.org/mongo-driver/mongo/options"
 )
 
 type repo struct {
@@ -40,7 +41,9 @@ func (r repo) Get(ctx context.Context, id string) (*domain.CodeBlock, error) {
 }
 
 func (r repo) List(ctx context.Context) ([]*domain.CodeBlock, error) {
-	res, err := r.c.Find(ctx, bson.D{})
+	opts := options.Find().SetSort(bson.D{{"rating", -1}})
+
+	res, err := r.c.Find(ctx, opts)
 	if err != nil {
 		return nil, domain.ErrCodeBlockNotFound
 	}
