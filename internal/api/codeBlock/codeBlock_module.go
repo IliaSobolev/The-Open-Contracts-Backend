@@ -30,12 +30,14 @@ func (m *Module) createCodeBlock(c *gin.Context) {
 	var codeBlock domain.CodeBlockDTO
 	err := c.ShouldBindJSON(&codeBlock)
 	if err != nil {
+		c.Error(err)
 		c.AbortWithStatusJSON(http.StatusBadRequest, gin.H{"error": "Invalid params"})
 		return
 	}
 
 	err = m.cb.Create(c, codeBlock)
 	if err != nil {
+		c.Error(err)
 		c.AbortWithStatusJSON(http.StatusInternalServerError, gin.H{"error": "failed to create codeBlock"})
 		return
 	}
@@ -52,6 +54,11 @@ func (m *Module) getCodeBlock(c *gin.Context) {
 	}
 	res, err := m.cb.Get(context.Background(), id)
 	if err != nil {
+		if errors.Is(err, domain.ErrCodeBlockNotFound) {
+			c.AbortWithStatusJSON(http.StatusNotFound, gin.H{"error": "code block not found"})
+			return
+		}
+		c.Error(err)
 		c.AbortWithStatusJSON(http.StatusInternalServerError, gin.H{"error": "failed to get codeBlock"})
 		return
 	}
@@ -65,6 +72,7 @@ func (m *Module) getCodeBlocks(c *gin.Context) {
 			c.AbortWithStatusJSON(http.StatusNotFound, gin.H{"error": "code blocks not found"})
 			return
 		}
+		c.Error(err)
 		c.AbortWithStatusJSON(http.StatusInternalServerError, gin.H{"error": "failed to get codeBlocks"})
 		return
 	}
