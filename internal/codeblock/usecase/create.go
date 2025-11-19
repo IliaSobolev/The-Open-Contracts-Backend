@@ -12,8 +12,8 @@ import (
 var titleRegex = regexp.MustCompile("^[A-Za-z ]+$")
 
 func (uc *uc) Create(ctx context.Context, codeBlockDTO domain.CodeBlockDTO) error {
-	if codeBlockDTO.Title == "" || codeBlockDTO.Description == "" || codeBlockDTO.Body == "" || !titleRegex.MatchString(codeBlockDTO.Title) {
-		return errors.New("invalid data")
+	if err := codeBlockDTO.Validate(titleRegex); err != nil {
+		return err
 	}
 	found := utils.LangValidation(codeBlockDTO.Lang)
 	if !found {

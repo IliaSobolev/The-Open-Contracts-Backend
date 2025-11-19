@@ -3,6 +3,7 @@ package domain
 import (
 	"context"
 	"github.com/pkg/errors"
+	"regexp"
 )
 
 type CodeBlock struct {
@@ -21,6 +22,26 @@ type CodeBlockDTO struct {
 	Description string `json:"description" bson:"description"`
 	Lang        string `json:"lang" bson:"lang"`
 	Body        string `json:"body" bson:"body"`
+}
+
+func (dto *CodeBlockDTO) Validate(titleRegex *regexp.Regexp) error {
+	if dto.Title == "" {
+		return errors.New("title is required")
+	}
+
+	if !titleRegex.MatchString(dto.Title) {
+		return errors.New("title format is invalid")
+	}
+
+	if dto.Description == "" {
+		return errors.New("description is required")
+	}
+
+	if dto.Body == "" {
+		return errors.New("body is required")
+	}
+
+	return nil
 }
 
 var ErrCodeBlockNotFound = errors.New("code block not found")
