@@ -86,7 +86,7 @@ func (r repo) List(ctx context.Context, params domain.SearchParams) ([]*domain.C
 	//if err := cursor.All(ctx, &results); err != nil {
 	//	return nil, err
 	//}
-	if len(results) == 0 {
+	if len(results) == 0 || results == nil {
 		return nil, domain.ErrCodeBlockNotFound
 	}
 	return results, nil
