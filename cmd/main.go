@@ -6,6 +6,7 @@ import (
 	codeblockUsecase "TOC/internal/codeblock/usecase"
 	"TOC/pkg/utils"
 	"context"
+	"github.com/gin-contrib/cors"
 	"github.com/gin-gonic/gin"
 	"github.com/rs/zerolog"
 	"github.com/rs/zerolog/log"
@@ -66,6 +67,12 @@ func main() {
 
 	//rest api
 	r := gin.New()
+	r.Use(cors.New(cors.Config{
+		AllowAllOrigins: true,
+		AllowMethods:    []string{"GET", "POST", "PUT", "PATCH", "DELETE"},
+		AllowHeaders:    []string{"Origin", "Content-Length", "Content-Type", "Authorization"},
+		ExposeHeaders:   []string{"Content-Length"},
+	}))
 	api := api.NewAPI(r, codeblockUC)
 	err = api.Start()
 	if err != nil {
