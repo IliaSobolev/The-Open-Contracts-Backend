@@ -15,7 +15,7 @@ type User struct {
 type UserUsecase interface {
 	Create(ctx context.Context, user *User) (*User, error)
 	GetByID(ctx context.Context, id int64) (*User, error)
-	Authenticate(ctx context.Context, user *User) (*User, error)
+	Authenticate(ctx context.Context, user *User) (bool, error)
 }
 
 type UserRepository interface {
